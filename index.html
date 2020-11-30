@@ -1,0 +1,259 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Document</title>
+  
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">  
+  <script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+  <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+  <style>
+        img{
+            width: 50px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+  <div id="modal_show" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          title:<p id="show-title"></p>
+          description:<p id="show-desc"></p>
+          image:<img id="show-img" src="" alt="show image">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <div id="modal_adding" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>id <input id="new_id" type="text" ></p>
+              <p>title <input id="new_title" type="text" required></p>
+              <p>description<input id="new_decs" type="text" required></p>
+              <p>category<input id="new_category" type="text" required></p>
+              <p><input type="file" id="file-image"></p>
+            </div>
+            <div class="modal-footer">
+              <button id="addnewrow" type="button" class="btn btn-primary">Add new peoducts</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div id="modalupdate" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <p>id <BR></BR> <input id="up-id" disabled="disabled" type="text"></p>
+                <p>title <BR></BR><input id="up-title" type="text"></p>
+                <p>description <BR></BR><textarea id="up-description" cols="30" rows="3"></textarea></p>
+                <p>category <BR></BR><input id="up-category" type="text"></p>
+            </div>
+            <div class="modal-footer">
+              <button id='save_chang' type="button" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button id='addrow' class="btn btn-default">add+</button>
+      </div>
+    <table id="example">
+        <thead>
+            <tr>
+                <th>id <i class="far fa-trash-alt"></i></th>
+                <th>title</th>
+      
+                <th>description</th>
+
+                <th>category</th>
+
+                <th>image</th>
+
+                <th>delete</th>
+
+                <th>update</th>
+
+                <th>adding</th>
+
+                <th>show</th>
+              
+            </tr>
+            <tbody id="products">
+            </tbody>
+        </thead>
+    </table>
+</body>
+
+<script>
+    const products=[
+        {"id":"1","tilte":"swite modern","category":"women clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"},
+        {"id":"2","tilte":"t-shirt black","category":"mens clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"},
+        {"id":"3","tilte":"swite sumer","category":"girls clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"},
+        {"id":"4","tilte":"jaket cuir","category":"women clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"},
+        {"id":"5","tilte":"shorte draw","category":"women clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"},
+        {"id":"6","tilte":"swite sleep","category":"mens clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"},
+        {"id":"7","tilte":"t-shirt modern","category":"women clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"},
+        {"id":"8","tilte":"winter jacket","category":"youngs clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"},
+        {"id":"9","tilte":"cloun red","category":"women clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"},
+        {"id":"10","tilte":"swite sumer","category":"bebe clouting","description":"the best on the the summer for you","image":"https://res.cloudinary.com/dgjvthpnh/image/upload/v1606400375/j4mptpvkyza1oyim6u1y.jpg"}
+    ]
+
+var productscopy=products;
+
+function createrows(data){
+ 
+    $.each(data,function(key,value){
+      $("#products").append("<tr><td>"+value.id+"</td><td>"+value.tilte+"</td><td>"+value.category+"</td><td>"+value.description+"</td><td><img src="+value.image+" alt='server image not upload'></td><td></td><td><button class='btn_delete' id="+value.id+">delete</button></td><td><button id="+value.id+" class='btn_update'>update</button></td><td><button class='btn_show' id="+value.id+">Show</button></td></tr>")
+    })
+}
+
+
+        $(document).ready(function(){   
+        createrows(productscopy)
+        $("#example").DataTable();
+       
+        $("#products").on("click",".btn_delete",function(){
+          var id=$(this).attr("id")
+          $.each(productscopy,function(key,val){
+            if(id==val.id){
+                 productscopy.splice(key,1)
+                 const newdat=productscopy
+                 console.log(newdat)
+                 $('#products tr').remove()
+                 createrows(newdat)
+                 return false
+                 
+                }
+          
+          })
+         
+                 
+                 
+                 
+                })
+      
+      $("#products").on("click",".btn_update",function(){
+          var id=$(this).attr("id")
+           $.each(productscopy,function(key,val){
+             if(id==val.id){
+              
+              $("#up-id").val(val.id)
+               $("#up-title").val(val.tilte)
+               $("#up-category").val(val.category)
+               $("#up-description").val(val.description)
+               
+             }
+           })
+           $('#modalupdate').modal("show");
+        })
+     $("#save_chang").on("click",function(){
+       var id=$("#up-id").val()
+       $.each(productscopy,function(key,val){
+         if(id==val.id){
+         
+               val.tilte=$("#up-title").val()
+               val.category=$("#up-category").val()
+               val.description=$("#up-description").val()
+               $('#modalupdate').modal("hide");
+               console.log(productscopy)
+               $('#products tr').empty()
+               createrows(productscopy)
+               
+         }
+         
+       })
+       
+     })
+         
+    
+     $("#addrow").on("click",function(){
+      var last_id=1
+        last_id+=parseInt(productscopy[productscopy.length-1].id)
+       
+       $("#new_id").val(last_id)
+       $("#new_title").val("")
+      $("#new_decs").val("")
+      $("#new_category").val("")
+       $("#modal_adding").modal("show")
+       
+     })
+
+     $("#file-image").on("change",function(e){
+       console.log(e.target.files[0])
+       var src=URL.createObjectURL(e.target.files[0])
+          newrow.image=src;
+     })
+
+     const newrow={}
+     $("#addnewrow").on("click",function(){
+      var id= $("#new_id").val()
+      var tit= $("#new_title").val()
+      var desc= $("#new_decs").val()
+      var cat= $("#new_category").val()
+     
+      newrow.id=id
+      newrow.tilte=tit
+      newrow.category=cat
+      newrow.description=desc
+     
+  
+      productscopy.push(newrow)
+      $('#products tr').empty()
+      createrows(productscopy)
+         console.log(productscopy)
+         $("#modal_adding").modal("hide")
+     })
+
+
+     $("#products").on("click",".btn_show",function(){
+          var id=$(this).attr("id")
+        $.each(productscopy,function(key,val){
+          if(id==val.id){
+            console.log(val.tilte)
+            $("#show-title").html(val.tilte)
+               $("#show-desc").html(val.description)
+               $("#show-img").attr("src",val.image)
+          }
+        })
+            
+               
+             
+           
+           $("#modal_show").modal("show")
+        })
+
+    
+        })
+      
+</script>
+</html>
